@@ -1,0 +1,145 @@
+#include <stdio.h>
+#include <fstream>
+#include <iostream>
+#include <iomanip>
+#include <sstream>
+#include <math.h>
+#include <string>
+#include <time.h>
+#include <cstdlib>
+
+
+using namespace std;
+
+class FileType
+{
+
+public:
+
+string file_name; // Should be character
+string file_type; // Should be character
+string permissions; // Should be character
+string date;
+string owner;
+string file_size; // Should be integer
+char buffer[256];
+
+
+FileType()
+{
+this->owner = "N/A";
+this->date = "N/A";
+this->file_name = "N/A";
+this->file_type = "N/A";
+this->permissions = "N/A";
+this->file_size = "N/A";
+
+}
+
+
+void setOwner(string owner_name) { this->owner = owner_name; }
+void setDate(string calendar) { this->date = calendar; }
+void setFileName(string f_name) { this->file_name = f_name; }
+void setFileType(string f_type) { this->file_type = f_type; }
+void setPermissions(string perms) { this->permissions = perms; }
+void setFileSize(string f_size) { this->file_size = f_size; }
+
+string getOwner() { return this->owner; }
+string getDate() { return this->date; }
+string getFileName() { return this->file_name; }
+string getFileType() { return this->file_type; }
+string getPermissions() { return this->permissions; }
+string getFileSize() { return this->file_size; }
+
+void fileInfo()
+{
+cout << "General file information ========" << endl;
+cout << "File name: " << this->file_name << endl;
+cout << "File type: " << this->file_type << endl;
+cout << "Size: " << this->file_size << " KB" << endl;
+cout << "Date created: " << this->date << endl;
+cout << "---------- Security" << endl;
+cout << "Owner: " << this->owner << endl;
+cout << "Permissions: " << this->permissions << endl;
+cout << endl;
+}
+};
+
+void initFileList(ifstream& file, FileType array[], int size)
+{
+/* char files_name;
+char file_typing;
+char access;
+int file_sizing;*/
+
+string files_name;
+string file_typing;
+string access;
+string file_sizing;
+string date_created;
+string doc_owner;
+
+for (int i = 0; i < size; i++)
+{
+getline(file, files_name);
+getline(file, file_typing);
+getline(file, file_sizing);
+getline(file, date_created);
+getline(file, doc_owner);
+getline(file, access);
+
+array[i].setOwner(doc_owner);
+array[i].setDate(date_created);
+array[i].setFileName(files_name);
+array[i].setFileType(file_typing);
+array[i].setPermissions(access);
+array[i].setFileSize(file_sizing);
+
+}
+
+}
+
+
+void printFileList(FileType array[], int size)
+{
+for (int i = 0; i < size; i++)
+{
+array[i].fileInfo();
+}
+}
+
+void changePermission()
+{
+cout << "You are changing the permissions to (example: rwx || rw || rx): " << endl;
+}
+
+
+int main()
+{
+string document_name, change_perm;
+int size = 15;
+FileType files[3];
+  
+ifstream input("input.txt");
+
+initFileList(input, files, 3);
+printFileList(files, 3);
+
+cout << "========================" << endl;
+cout << "Would you like to change editing permissions? If so, which document?: " << endl;
+std::cin >> document_name;
+for (int i = 0; i < 3; i++)
+{
+if ((document_name == files[i].getFileName()))
+{
+changePermission();
+cin >> change_perm;
+files[i].setPermissions(change_perm);
+}
+else
+{
+cout << "You did this wrong" << endl;
+}
+}
+  
+}
